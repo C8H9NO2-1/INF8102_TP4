@@ -8,7 +8,7 @@ response = client.create_stack(
     Parameters=[
         {
             'ParameterKey': 'EnvironmentName',
-            'ParameterValue': 'Lab',
+            'ParameterValue': 'Lab2',
         },
     ],
     DisableRollback=True,
