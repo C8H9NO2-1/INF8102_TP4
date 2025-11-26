@@ -1,0 +1,42 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Deploy a secure EC2 instance on the public subnet of AZ1",
+    "Resources": {
+        "EC2Instance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "KeyName": "polystudent-pair",
+                "InstanceType": "t3.micro",
+                "ImageId": "ami-0abac8735a38475db",
+                "AvailabilityZone": "ca-central-1a",
+                "SecurityGroupIds": ["sg-04c7781474fc2b1af"],
+                "SubnetId": "subnet-090677703d819575e",
+                "IamInstanceProfile": "LabInstanceProfile",
+                "BlockDeviceMappings": [
+                    {
+                        "DeviceName": "/dev/sda1",
+                        "Ebs": {
+                            "DeleteOnTermination": "false",
+                            "VolumeSize": "80"
+                        }
+                    }
+                ]
+            }
+        },
+        "CloudWatchAlarm": {
+            "Type" : "AWS::CloudWatch::Alarm",
+            "Properties" : {
+                "AlarmDescription" : "Controls the ingress number of packets on EC2 instance",
+                "AlarmName" : "Ingress Alarm Public AZ1",
+                "ComparisonOperator" : "GreaterThanOrEqualToThreshold",
+                "DatapointsToAlarm" : 1,
+                "EvaluationPeriods" : 1,
+                "MetricName" : "NetworkPacketsIn",
+                "Namespace" : "AWS/EC2",
+                "Period" : 60,
+                "Statistic" : "Average",
+                "Threshold" : 60000,
+            }
+        }
+    }
+}
