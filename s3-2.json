@@ -40,6 +40,73 @@
                     ]
                 }
             }
+        },
+        "LogPolicy": {
+            "Type" : "AWS::S3::BucketPolicy",
+            "Properties" : {
+                "Bucket" : "polystudents352-460783431840",
+                "PolicyDocument" : {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "1",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "s3.amazonaws.com"
+                            },
+                            "Action": [
+                                "s3:GetReplicationConfiguration",
+                                "s3:ListBucket"
+                            ],
+                            "Resource": "arn:aws:s3:::polystudents352-460783431840"
+                        },
+                        {
+                            "Sid": "2",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "s3.amazonaws.com"
+                            },
+                            "Action": [
+                                "s3:GetObjectVersion",
+                                "s3:GetObjectVersionAcl",
+                                "s3:GetObjectVersionTagging"
+                            ],
+                            "Resource": "arn:aws:s3:::polystudents352-460783431840/*"
+                        },
+                        {
+                            "Sid": "AwsCloudTrailAclCheck",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "cloudtrail.amazonaws.com"
+                            },
+                            "Action": "s3:GetBucketAcl",
+                            "Resource": "arn:aws:s3:::polystudents352-460783431840"
+                        },
+                        {
+                            "Sid": "AwsCloudTrailWrite",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "cloudtrail.amazonaws.com"
+                            },
+                            "Action": [
+                                "s3:PutObject",
+                                "s3:DeleteObject",
+                                "s3:GetObject"
+                            ],
+                            "Resource": "arn:aws:s3:::polystudents352-460783431840/AWSLogs/460783431840/*"
+                        }
+                    ]
+                }
+            }
+        },
+        "TestTrail":  {
+            "Type" : "AWS::CloudTrail::Trail",
+            "Properties" : {
+                "IsLogging" : true,
+                "S3BucketName" : "polystudents352-460783431840",
+                "TrailName" : "polystudent-lab4-trail"
+            },
+            "DependsOn": ["LogPolicy"]
         }
     },
     "Outputs": {
